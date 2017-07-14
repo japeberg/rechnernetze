@@ -2,7 +2,7 @@ import socket
 import time
 
 HOST = ''
-PORT = 8089
+PORT = 8088
 
 woerter = {}
 
@@ -90,7 +90,19 @@ while 1:
     path = temp[1]
     #path = path[1:]
     print path
-    
-    http_response(conn,"test")
+   
+    if path == '/':
+        output = "<h1>Emails</h1><br>"
+        for e in range(len(mails)):
+            output = output+'<a href="/'+str(e)+'">Email '+str(e+1)+'</a><br>'
+        http_response(conn,output)
+    else:
+        output = '<h1>Emails '+path[1:]+'</h1><br>'
+        output = output+mails[int(path[1:])]
+
+        http_response(conn,output)
+        
+        
+
     conn.close()
 s_http.close()
