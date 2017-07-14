@@ -2,7 +2,7 @@ import socket
 import time
 
 HOST = ''
-PORT = 8086
+PORT = 8089
 
 woerter = {}
 
@@ -67,7 +67,9 @@ def pop_pull():
     print mails
     s_pop.close()
     return mails
+
 def http_response(conn, content):
+    # Antwort an den Browser
     conn.send("HTTP/1.1 200 OK\r\nDate: Wed, 11 Apr 2012 21:29:04 GMT\r\nServer: Python/6.6.6 (custom)\r\nContent-Length:1024\r\nContent-Type: text/html\r\n\r\n")
     conn.send("<html><head></head><body>")
     conn.send(content)
@@ -84,10 +86,11 @@ while 1:
         request.append(recvline(conn))
         if request[-1] == '':
             break
-
-    print request
-    # Antwort an den Browser
+    temp = request[0].split()
+    path = temp[1]
+    #path = path[1:]
+    print path
+    
     http_response(conn,"test")
-
     conn.close()
 s_http.close()
