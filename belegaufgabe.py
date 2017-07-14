@@ -1,7 +1,8 @@
 import socket
+import time
 
 HOST = ''
-PORT = 8085
+PORT = 8086
 
 woerter = {}
 
@@ -66,20 +67,27 @@ def pop_pull():
     print mails
     s_pop.close()
     return mails
+def http_response(conn, content):
+    conn.send("HTTP/1.1 200 OK\r\nDate: Wed, 11 Apr 2012 21:29:04 GMT\r\nServer: Python/6.6.6 (custom)\r\nContent-Length:1024\r\nContent-Type: text/html\r\n\r\n")
+    conn.send("<html><head></head><body>")
+    conn.send(content)
+    conn.send("</body></html>\r\n\r\n")
+    
 
 mails = pop_pull()
 
 while 1:
     conn, addr = s_http.accept()
-    request = recvline(conn)
-    if request == 'GET / HTTP/1.1':
-        print request
-    else:
-        print 'failure'
-        print request
-#        conn.send("HTTP/1.1 200 OK\r\n\r\n")
-        conn.send("HTTP/1.1 200 OK\r\nDate: Wed, 11 Apr 2012 21:29:04 GMT\r\nServer: Python/6.6.6 (custom)\r\nContent-Type: text/html\r\n\r\n")
-        conn.send("<html><head></head><body>Error 404</body></html>\r\n")
+    request = []
+    request.append(recvline(conn))
+    while 1: 
+        request.append(recvline(conn))
+        if request[-1] == '':
+            break
 
-#    conn.close()
+    print request
+    # Antwort an den Browser
+    http_response(conn,"test")
+
+    conn.close()
 s_http.close()
