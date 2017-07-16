@@ -1,6 +1,7 @@
 
 keys = range(256) #Empfaenger
 values = [0] * 256  #Ausgangsports, alle noch unbekannt
+# zip() fuegt zwei Listen im reißverschlussverfahren zu einem dict zusammen
 address_table = dict(zip(keys, values)) #{Empfaenger:Ausgangsport}
 
 program = 1
